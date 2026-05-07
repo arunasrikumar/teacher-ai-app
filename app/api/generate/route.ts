@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: process.env.OPENAI_API_KEY
 });
 
 export async function POST(req: NextRequest) {
@@ -48,9 +48,10 @@ Return JSON in this format:
     //console.log(parsed);
 
     return new Response(answer, { status: 200 });
-  } catch (error: any) {
+  } catch (error) {
     console.log(error);
-    return NextResponse.json({ error: error?.message || 'Internal Server Error' }, { status: 500 });
+    const message = error instanceof Error ? error.message : 'Internal Server Error';
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 
